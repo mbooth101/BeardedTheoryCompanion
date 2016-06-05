@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/nav_group_sections">
+        <item
+            android:id="@+id/nav_item_schedule"
+            android:icon="@drawable/ic_schedule_grey600_24dp"
+            android:title="@string/nav_schedule" />
+        <item
+            android:id="@+id/nav_item_bookmarks"
+            android:icon="@drawable/ic_bookmark_grey600_24dp"
+            android:title="@string/nav_bookmarks" />
+        <item
+            android:id="@+id/nav_item_now_next"
+            android:icon="@drawable/ic_now_next_grey600_24dp"
+            android:title="@string/nav_now_next" />
+        <item
+            android:id="@+id/nav_item_performers"
+            android:icon="@drawable/ic_performers_grey600_24dp"
+            android:title="@string/nav_performers" />
+    </group>
+    <item
+        android:id="@+id/nav_item_settings"
+        android:title="@string/nav_settings" />
+    <item
+        android:id="@+id/nav_item_about"
+        android:title="@string/nav_about" />
+</menu>
