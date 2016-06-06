@@ -73,9 +73,7 @@ public class ClashFinderDownloader {
 
                 // Store schedule in database
                 Schedule.Events.remove(context);
-                Schedule.Days.remove(context);
                 Schedule.Events.add(context, parser.getEvents());
-                Schedule.Days.add(context, parser.getDays());
 
                 // Set schedules's last modified tag
                 SharedPreferences prefs = context.getSharedPreferences(PREFS_FILE, Context.MODE_PRIVATE);

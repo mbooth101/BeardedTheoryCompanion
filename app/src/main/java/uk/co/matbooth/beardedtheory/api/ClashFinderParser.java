@@ -3,6 +3,10 @@ package uk.co.matbooth.beardedtheory.api;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.DefaultHandler;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
@@ -17,11 +21,6 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.helpers.DefaultHandler;
-
-import uk.co.matbooth.beardedtheory.model.Day;
 import uk.co.matbooth.beardedtheory.model.Event;
 import uk.co.matbooth.beardedtheory.model.Performer;
 import uk.co.matbooth.beardedtheory.model.Stage;
@@ -29,9 +28,9 @@ import uk.co.matbooth.beardedtheory.model.Stage;
 /**
  * A parser that will extract lists of events, days, stages and performers from
  * a "Clash Finder" style XML stream.
- * <p>
+ * <p/>
  * Example usage:
- * <p>
+ * <p/>
  * <pre>
  * ClashFinderParser parser = new ClashFinderParser();
  * parser.parse(new InputStream(...));
@@ -51,7 +50,6 @@ public class ClashFinderParser extends DefaultHandler {
 
     // Data parsed out of the clash finder data
     private final List<Event> events = new ArrayList<>();
-    private final List<Day> days = new ArrayList<>();
     private final List<Stage> stages = new ArrayList<>();
     private final List<Performer> performers = new ArrayList<>();
 
@@ -106,12 +104,7 @@ public class ClashFinderParser extends DefaultHandler {
                 current.setStartTime(time);
 
                 // Figure out the day from the start time
-                Date d = DAY_FORMAT.parse(data);
-                Day day = new Day();
-                day.setDate(d);
-                if (!days.contains(day)) {
-                    days.add(day);
-                }
+                Date day = DAY_FORMAT.parse(data);
                 current.setDay(day);
                 partial = null;
             } catch (ParseException e) {
@@ -162,11 +155,6 @@ public class ClashFinderParser extends DefaultHandler {
     @NonNull
     public List<Event> getEvents() {
         return Collections.unmodifiableList(events);
-    }
-
-    @NonNull
-    public List<Day> getDays() {
-        return Collections.unmodifiableList(days);
     }
 
     @NonNull

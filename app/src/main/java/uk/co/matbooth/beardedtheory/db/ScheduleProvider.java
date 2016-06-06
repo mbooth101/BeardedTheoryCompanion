@@ -21,16 +21,14 @@ public class ScheduleProvider extends ContentProvider {
     // URI matcher and IDs needed for matching rules
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
     private static final int EVENTS = 10;
-    private static final int DAYS = 11;
-    private static final int EVENT = 20;
-    private static final int DAY = 21;
+    private static final int EVENTS_DISTINCT = 20;
+    private static final int EVENT = 30;
 
     // Configure the URI matching rules
     static {
         URI_MATCHER.addURI(Schedule.CONTENT_URI.getAuthority(), Schedule.Events.TABLE, EVENTS);
-        URI_MATCHER.addURI(Schedule.CONTENT_URI.getAuthority(), Schedule.Days.TABLE, DAYS);
+        URI_MATCHER.addURI(Schedule.CONTENT_URI.getAuthority(), Schedule.Events.TABLE + "/DISTINCT", EVENTS_DISTINCT);
         URI_MATCHER.addURI(Schedule.CONTENT_URI.getAuthority(), Schedule.Events.TABLE + "/#", EVENT);
-        URI_MATCHER.addURI(Schedule.CONTENT_URI.getAuthority(), Schedule.Days.TABLE + "/#", DAY);
     }
 
     @Override
@@ -52,17 +50,18 @@ public class ScheduleProvider extends ContentProvider {
         SQLiteQueryBuilder builder = new SQLiteQueryBuilder();
         String table;
         switch (URI_MATCHER.match(uri)) {
-            case DAYS:
-                table = Schedule.Days.TABLE;
-                // Chronological order by default
+            case EVENTS_DISTINCT:
+                builder.setDistinct(true);
+            case EVENTS:
+                builder.setTables(Schedule.Events.TABLE);
+                // Chronological order by event start time default
                 if (sortOrder == null) {
-                    sortOrder = Schedule.Days.DAY + " ASC";
+                    sortOrder = Schedule.Events.START_TIME + " ASC";
                 }
                 break;
             default:
                 throw new IllegalArgumentException("Unknown URI: " + uri);
         }
-        builder.setTables(table);
         Cursor cursor = builder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         return cursor;
@@ -85,9 +84,6 @@ public class ScheduleProvider extends ContentProvider {
             switch (URI_MATCHER.match(uri)) {
                 case EVENTS:
                     table = Schedule.Events.TABLE;
-                    break;
-                case DAYS:
-                    table = Schedule.Days.TABLE;
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -118,9 +114,6 @@ public class ScheduleProvider extends ContentProvider {
             switch (URI_MATCHER.match(uri)) {
                 case EVENTS:
                     table = Schedule.Events.TABLE;
-                    break;
-                case DAYS:
-                    table = Schedule.Days.TABLE;
                     break;
                 default:
                     throw new IllegalArgumentException("Unknown URI: " + uri);

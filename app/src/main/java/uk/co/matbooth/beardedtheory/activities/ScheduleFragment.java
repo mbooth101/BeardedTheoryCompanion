@@ -16,12 +16,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import uk.co.matbooth.beardedtheory.R;
 import uk.co.matbooth.beardedtheory.db.Schedule;
-import uk.co.matbooth.beardedtheory.model.Day;
 
 public class ScheduleFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -53,17 +54,16 @@ public class ScheduleFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(getActivity(), Schedule.Days.CONTENT_URI, null, null, null, null);
+        String[] cols = new String[]{Schedule.Events.DAY};
+        return new CursorLoader(getActivity(), Schedule.Events.DISTINCT_URI, cols, null, null, null);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        List<Day> days = new ArrayList<>();
+        List<Long> days = new ArrayList<>();
         if (data != null) {
             while (data.moveToNext()) {
-                Day day = new Day();
-                day.setDate(new Date(data.getLong(data.getColumnIndex(Schedule.Days.DAY))));
-                days.add(day);
+                days.add(data.getLong(data.getColumnIndex(Schedule.Events.DAY)));
             }
         }
         adapter.setDays(days);
@@ -79,13 +79,13 @@ public class ScheduleFragment extends Fragment implements LoaderManager.LoaderCa
      */
     private static class DaysAdapter extends FragmentStatePagerAdapter {
 
-        private final List<Day> days = new ArrayList<>();
+        private final List<Long> days = new ArrayList<>();
 
         public DaysAdapter(FragmentManager fm) {
             super(fm);
         }
 
-        public void setDays(final List<Day> days) {
+        public void setDays(final List<Long> days) {
             this.days.clear();
             if (days != null) {
                 this.days.addAll(days);
@@ -97,7 +97,7 @@ public class ScheduleFragment extends Fragment implements LoaderManager.LoaderCa
         public Fragment getItem(int position) {
             Fragment f = new StageListFragment();
             Bundle args = new Bundle();
-            args.putParcelable(StageListFragment.ARG_DAY, days.get(position));
+            args.putLong(StageListFragment.ARG_DAY, days.get(position));
             f.setArguments(args);
             return f;
         }
@@ -109,7 +109,29 @@ public class ScheduleFragment extends Fragment implements LoaderManager.LoaderCa
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return days.get(position).toString();
+            long date = days.get(position);
+            // It's pretty amazing that these suffixes are not built into the formatter...
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(date);
+            String suffix;
+            switch (cal.get(Calendar.DAY_OF_MONTH) % 10) {
+                case 1:
+                    suffix = "st";
+                    break;
+                case 2:
+                    suffix = "nd";
+                    break;
+                case 3:
+                    suffix = "rd";
+                    break;
+                default:
+                    suffix = "th";
+                    break;
+            }
+            if (cal.get(Calendar.DAY_OF_MONTH) >= 11 && cal.get(Calendar.DAY_OF_MONTH) <= 13) {
+                suffix = "th";
+            }
+            return String.format(Locale.UK, "%1$ta %1$te", new Date(date)) + suffix;
         }
     }
 }

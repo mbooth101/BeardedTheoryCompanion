@@ -8,7 +8,7 @@ import java.util.Date;
 public class Event implements Parcelable {
 
     private long id;
-    private Day day;
+    private Date day;
     private Date startTime;
     private Date endTime;
     private Stage stage;
@@ -19,8 +19,10 @@ public class Event implements Parcelable {
 
     public Event(Parcel in) {
         id = in.readLong();
-        day = in.readParcelable(Day.class.getClassLoader());
         long time;
+        if ((time = in.readLong()) != 0L) {
+            day = new Date(time);
+        }
         if ((time = in.readLong()) != 0L) {
             startTime = new Date(time);
         }
@@ -39,11 +41,11 @@ public class Event implements Parcelable {
         this.id = id;
     }
 
-    public Day getDay() {
+    public Date getDay() {
         return day;
     }
 
-    public void setDay(Day day) {
+    public void setDay(Date day) {
         this.day = day;
     }
 
@@ -102,9 +104,9 @@ public class Event implements Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeLong(id);
-        dest.writeParcelable(day, flags);
-        dest.writeLong((startTime == null) ? 0L : startTime.getTime());
-        dest.writeLong((endTime == null) ? 0L : endTime.getTime());
+        dest.writeLong(day == null ? 0L : day.getTime());
+        dest.writeLong(startTime == null ? 0L : startTime.getTime());
+        dest.writeLong(endTime == null ? 0L : endTime.getTime());
         dest.writeParcelable(stage, flags);
         dest.writeParcelable(performer, flags);
     }

@@ -26,9 +26,6 @@ public class ScheduleDatabaseHelper extends SQLiteOpenHelper {
                 Schedule.Events.PERFORMER + " TEXT NOT NULL, " +
                 Schedule.Events.START_TIME + " INTEGER, " +
                 Schedule.Events.END_TIME + " INTEGER);");
-        database.execSQL("CREATE TABLE " + Schedule.Days.TABLE + " (" +
-                Schedule.Days._ID + " INTEGER PRIMARY KEY, " +
-                Schedule.Days.DAY + " INTEGER);");
     }
 
     @Override

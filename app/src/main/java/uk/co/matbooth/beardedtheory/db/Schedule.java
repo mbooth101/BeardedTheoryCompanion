@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.matbooth.beardedtheory.model.Day;
 import uk.co.matbooth.beardedtheory.model.Event;
 
 /**
@@ -40,6 +39,11 @@ public final class Schedule {
          * The content:// style URL for the events table.
          */
         public static final Uri CONTENT_URI = Schedule.CONTENT_URI.buildUpon().appendPath(TABLE).build();
+
+        /**
+         * The content:// style URL that yields distinct results for the events table.
+         */
+        public static final Uri DISTINCT_URI = Schedule.Events.CONTENT_URI.buildUpon().appendPath("DISTINCT").build();
 
         /**
          * Day column, indicates the day that the event is scheduled to take place in millis since the epoch.
@@ -83,7 +87,7 @@ public final class Schedule {
             final List<ContentValues> rows = new ArrayList<>(events.size());
             for (Event event : events) {
                 ContentValues values = new ContentValues();
-                values.put(DAY, event.getDay().getDate().getTime());
+                values.put(DAY, event.getDay().getTime());
                 values.put(STAGE, event.getStage().getName());
                 values.put(PERFORMER, event.getPerformer().getName());
                 values.put(START_TIME, event.getStartTime().getTime());
@@ -102,57 +106,6 @@ public final class Schedule {
         public static int remove(@NonNull final Context context) {
             final ContentResolver cr = context.getContentResolver();
             return cr.delete(Events.CONTENT_URI, "1", null);
-        }
-    }
-
-    /**
-     * Interface into the schedule provider's days table.
-     */
-    public static final class Days implements BaseColumns {
-
-        /**
-         * Name of the days table.
-         */
-        public static final String TABLE = "days";
-
-        /**
-         * The content:// style URL for the days table.
-         */
-        public static final Uri CONTENT_URI = Schedule.CONTENT_URI.buildUpon().appendPath(TABLE).build();
-
-        /**
-         * Day column, indicates the day that the event is scheduled to take place in millis since the epoch.
-         * <p>Type: INTEGER</p>
-         */
-        public static final String DAY = "day";
-
-        /**
-         * Adds all the given days to the database.
-         *
-         * @param context an application context
-         * @param days  a list of days to add to the schedule
-         * @return the number of days that were added
-         */
-        public static int add(@NonNull final Context context, @NonNull final List<Day> days) {
-            final ContentResolver cr = context.getContentResolver();
-            final List<ContentValues> rows = new ArrayList<>(days.size());
-            for (Day day : days) {
-                ContentValues values = new ContentValues();
-                values.put(DAY, day.getDate().getTime());
-                rows.add(values);
-            }
-            return cr.bulkInsert(Days.CONTENT_URI, rows.toArray(new ContentValues[rows.size()]));
-        }
-
-        /**
-         * Removes all day records from the database.
-         *
-         * @param context an application context
-         * @return the number of days that were deleted
-         */
-        public static int remove(@NonNull final Context context) {
-            final ContentResolver cr = context.getContentResolver();
-            return cr.delete(Days.CONTENT_URI, "1", null);
         }
     }
 }
