@@ -56,19 +56,20 @@ public class StageListFragment extends Fragment implements LoaderManager.LoaderC
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] cols = new String[]{Schedule.Events.STAGE};
         String where = Schedule.Events.DAY + " = ?";
-        String order = Schedule.Events.STAGE + " ASC";
+        // Ordering by ID should give us most important stage first in most cases
+        String order = Schedule.Events._ID;
         return new CursorLoader(getActivity(), Schedule.Events.DISTINCT_URI, cols, where, new String[]{Long.toString(day)}, order);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        List<String> stages = new ArrayList<>();
+        List<String> list = new ArrayList<>();
         if (data != null) {
             while (data.moveToNext()) {
-                stages.add(data.getString(data.getColumnIndex(Schedule.Events.STAGE)));
+                list.add(data.getString(data.getColumnIndex(Schedule.Events.STAGE)));
             }
         }
-        adapter.setStages(stages);
+        adapter.setStages(list);
     }
 
     @Override
@@ -84,9 +85,9 @@ public class StageListFragment extends Fragment implements LoaderManager.LoaderC
 
             public final TextView text;
 
-            public ViewHolder(View view) {
-                super(view);
-                this.text = (TextView) view.findViewById(android.R.id.text1);
+            public ViewHolder(View itemView) {
+                super(itemView);
+                this.text = (TextView) itemView.findViewById(android.R.id.text1);
             }
         }
 
