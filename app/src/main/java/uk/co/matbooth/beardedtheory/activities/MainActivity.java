@@ -181,7 +181,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
             Fragment f = Fragment.instantiate(this, section.getFragmentClass());
-            ft.add(R.id.coord_layout, f, section.name());
+            ft.add(R.id.main_content, f, section.name());
             ft.commit();
             current = section;
         }
