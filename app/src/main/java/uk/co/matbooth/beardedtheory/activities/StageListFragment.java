@@ -28,13 +28,13 @@ public class StageListFragment extends Fragment implements LoaderManager.LoaderC
     // The day in milliseconds for which we are showing the stage list
     private long day;
 
-    private SimpleStringRecyclerViewAdapter adapter;
+    private StageListAdapter adapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         day = getArguments().getLong(ARG_DAY);
-        adapter = new SimpleStringRecyclerViewAdapter();
+        adapter = new StageListAdapter();
     }
 
     @Nullable
@@ -76,20 +76,16 @@ public class StageListFragment extends Fragment implements LoaderManager.LoaderC
         adapter.setStages(null);
     }
 
-    public static class SimpleStringRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleStringRecyclerViewAdapter.ViewHolder> {
+    public static class StageListAdapter extends RecyclerView.Adapter<StageListAdapter.ViewHolder> {
 
         private final List<String> stages = new ArrayList<>();
 
         public static class ViewHolder extends RecyclerView.ViewHolder {
-            public String mBoundString;
 
-            public final View view;
             public final TextView text;
 
             public ViewHolder(View view) {
                 super(view);
-                this.view = view;
                 this.text = (TextView) view.findViewById(android.R.id.text1);
             }
         }
@@ -111,7 +107,6 @@ public class StageListFragment extends Fragment implements LoaderManager.LoaderC
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
-            holder.mBoundString = stages.get(position);
             holder.text.setText(stages.get(position));
         }
 

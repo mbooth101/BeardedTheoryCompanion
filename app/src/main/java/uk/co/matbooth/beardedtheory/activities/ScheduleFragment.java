@@ -36,7 +36,7 @@ public class ScheduleFragment extends Fragment implements LoaderManager.LoaderCa
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.pager_fragment, container, false);
         ViewPager pager = (ViewPager) view.findViewById(R.id.main_pager);
         pager.setAdapter(adapter);
