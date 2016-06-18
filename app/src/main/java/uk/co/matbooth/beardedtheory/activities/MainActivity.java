@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -32,6 +33,30 @@ import uk.co.matbooth.beardedtheory.R;
 import uk.co.matbooth.beardedtheory.api.ClashFinderDownloader;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    private enum Section {
+        SCHEDULE(ScheduleFragment.class, R.string.nav_schedule),
+        BOOKMARKS(BookmarksFragment.class, R.string.nav_bookmarks),
+        NOWNEXT(NowNextFragment.class, R.string.nav_now_next),
+        PERFORMERS(PerformersFragment.class, R.string.nav_performers);
+
+        private final String fragmentClass;
+        private final int titleStringId;
+
+        Section(Class<? extends Fragment> fragmentClass, @StringRes int titleStringId) {
+            this.fragmentClass = fragmentClass.getName();
+            this.titleStringId = titleStringId;
+        }
+
+        public String getFragmentClass() {
+            return fragmentClass;
+        }
+
+        @StringRes
+        public int getTitleStringId() {
+            return titleStringId;
+        }
+    }
 
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle drawerToggle;
@@ -66,11 +91,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        // Configure application tool bar
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         // Configure the navigation drawer toggle
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
         drawerToggle.setDrawerIndicatorEnabled(true);
@@ -149,15 +177,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawerLayout.closeDrawers();
         switch (item.getItemId()) {
             case R.id.nav_item_schedule:
+                item.setChecked(true);
                 navigateToSection(Section.SCHEDULE);
                 break;
             case R.id.nav_item_bookmarks:
+                item.setChecked(true);
                 navigateToSection(Section.BOOKMARKS);
                 break;
             case R.id.nav_item_now_next:
+                item.setChecked(true);
                 navigateToSection(Section.NOWNEXT);
                 break;
             case R.id.nav_item_performers:
+                item.setChecked(true);
                 navigateToSection(Section.PERFORMERS);
                 break;
             case R.id.nav_item_settings:
