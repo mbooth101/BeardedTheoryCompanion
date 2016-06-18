@@ -18,6 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".activities.SettingsActivity">
+        </activity>
         <provider
             android:name=".db.ScheduleProvider"
             android:authorities="uk.co.matbooth.beardedtheory.schedule.provider"

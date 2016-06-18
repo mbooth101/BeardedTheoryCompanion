@@ -193,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 navigateToSection(Section.PERFORMERS);
                 break;
             case R.id.nav_item_settings:
+                startActivity(new Intent(this, SettingsActivity.class));
                 break;
             case R.id.nav_item_about:
                 new AboutDialogFragment().show(getSupportFragmentManager(), "about");
