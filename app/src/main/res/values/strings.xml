@@ -29,6 +29,30 @@
         <item quantity="other">Downloaded %1$d events</item>
     </plurals>
 
+    <!-- Settings -->
+    <string name="settings_notifications">Notifications</string>
+    <string name="settings_notifications_enabled">Enable notifications</string>
+    <string name="settings_notifications_enabled_summary">If checked, you will be notified of upcoming bookmarked events</string>
+    <string name="settings_notifications_vibrate">Vibrate</string>
+    <string name="settings_notifications_vibrate_summary">Vibrate on notification</string>
+    <string name="settings_notifications_led">Flash LED</string>
+    <string name="settings_notifications_led_summary">Blink the LED on notification</string>
+    <string name="settings_notifications_delay">Notification time</string>
+    <string-array name="settings_notifications_delay_entries">
+        <item>5 minutes</item>
+        <item>10 minutes</item>
+        <item>15 minutes</item>
+        <item>30 minutes</item>
+        <item>1 hour</item>
+    </string-array>
+    <string-array name="settings_notifications_delay_values">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+    </string-array>
+
     <!-- Dialog Text -->
     <string name="about_text">Copyright 2016 Mat Booth\n\nLicensed under <a href="http://www.apache.org/licenses/LICENSE-2.0.html">Apache License, Version 2.0</a>. Source code for this application is available on <a href="https://github.com/mbooth101/bearded-theory-companion">GitHub</a>.\n\nInspired by Christophe Beyls\' excellent FOSDEM Companion.</string>
 </resources>

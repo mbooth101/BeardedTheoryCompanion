@@ -1,5 +1,6 @@
 package uk.co.matbooth.beardedtheory.activities;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,11 @@ public class SettingsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
+        // Restore the fragment
+        if (savedInstanceState == null) {
+            Fragment f = new SettingsFragment();
+            getFragmentManager().beginTransaction().add(R.id.main_content, f, "settings").commit();
+        }
         getSupportActionBar().setTitle(R.string.nav_settings);
     }
 
